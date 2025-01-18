@@ -7,24 +7,30 @@ import Form from "@components/Form";
 
 const UpdatePrompt = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const promptId = searchParams.get("id");
+  const searchParams = typeof window !== "undefined" ? useSearchParams() : null; // Ensure safe use
+  const promptId = searchParams?.get("id");
 
-  const [post, setPost] = useState({ prompt: "", tag: "", });
+  const [post, setPost] = useState({ prompt: "", tag: "" });
   const [submitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const getPromptDetails = async () => {
-      const response = await fetch(`/api/prompt/${promptId}`);
-      const data = await response.json();
+    if (!promptId) return;
 
-      setPost({
-        prompt: data.prompt,
-        tag: data.tag,
-      });
+    const getPromptDetails = async () => {
+      try {
+        const response = await fetch(`/api/prompt/${promptId}`);
+        const data = await response.json();
+
+        setPost({
+          prompt: data.prompt,
+          tag: data.tag,
+        });
+      } catch (error) {
+        console.error("Failed to fetch prompt details:", error);
+      }
     };
 
-    if (promptId) getPromptDetails();
+    getPromptDetails();
   }, [promptId]);
 
   const updatePrompt = async (e) => {
@@ -44,9 +50,11 @@ const UpdatePrompt = () => {
 
       if (response.ok) {
         router.push("/");
+      } else {
+        console.error("Failed to update prompt");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error while updating prompt:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -54,7 +62,7 @@ const UpdatePrompt = () => {
 
   return (
     <Form
-      type='Edit'
+      type="Edit"
       post={post}
       setPost={setPost}
       submitting={submitting}
