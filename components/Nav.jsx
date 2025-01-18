@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import Link from "next/link"; // for client-side navigation between pages
-import Image from "next/image"; // optimizes image loading
+import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
@@ -31,8 +31,8 @@ const Nav = () => {
         />
       </Link>
 
-      {/* Navigation */}
-      <div className="hidden sm:flex gap-3 md:gap-5">
+      {/* Desktop Navigation */}
+      <div className="sm:flex hidden gap-3 md:gap-5">
         {session?.user ? (
           <>
             <Link href="/create-prompt" className="black_btn">
@@ -66,47 +66,61 @@ const Nav = () => {
         )}
       </div>
 
-      {/* Mobile Dropdown */}
-      {session?.user && (
-        <div className="sm:hidden flex relative">
-          <Image
-            src={session?.user.image}
-            width={37}
-            height={37}
-            className="rounded-full"
-            alt="profile"
-            onClick={() => setdropDown((prev) => !prev)}
-          />
-          {dropDown && (
-            <div className="dropdown">
-              <Link
-                href="/profile"
-                className="dropdown_link"
-                onClick={() => setdropDown(false)}
-              >
-                My Profile
-              </Link>
-              <Link
-                href="/create-prompt"
-                className="dropdown_link"
-                onClick={() => setdropDown(false)}
-              >
-                Create Prompt
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  setdropDown(false);
-                  signOut();
-                }}
-                className="mt-5 w-full black_btn"
-              >
-                Sign Out
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+      {/* Mobile Navigation */}
+      <div className="sm:hidden flex relative">
+        {session?.user ? (
+          <div className="flex">
+            <Image
+              src={session?.user.image}
+              width={37}
+              height={37}
+              className="rounded-full"
+              alt="profile"
+              onClick={() => setdropDown((prev) => !prev)}
+            />
+            {dropDown && (
+              <div className="dropdown">
+                <Link
+                  href="/profile"
+                  className="dropdown_link"
+                  onClick={() => setdropDown(false)}
+                >
+                  My Profile
+                </Link>
+                <Link
+                  href="/create-prompt"
+                  className="dropdown_link"
+                  onClick={() => setdropDown(false)}
+                >
+                  Create Prompt
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setdropDown(false);
+                    signOut();
+                  }}
+                  className="mt-5 w-full black_btn"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          providers &&
+          Object.values(providers).map((provider) => (
+            <button
+              type="button"
+              key={provider.name}
+              onClick={() => signIn(provider.id)}
+              className="black_btn"
+            >
+              Sign In
+            </button>
+          ))
+        )}
+      </div>
     </nav>
   );
 };
