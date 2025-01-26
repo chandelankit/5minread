@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 
 import PromptCard from "./PromptCard";
+import { useSession } from "@node_modules/next-auth/react";
+import NewsCard from "./NewsCard";
 
-const PromptCardList = ({ id,data, handleTagClick }) => {
+const PromptCardList = ({data, handleTagClick }) => {
   return (
     <div className='mt-16 prompt_layout'>
       {data.map((post) => (
@@ -18,13 +20,30 @@ const PromptCardList = ({ id,data, handleTagClick }) => {
   );
 };
 
+
+const NewsCardList = ({data}) => {
+  return (
+    <div className='mt-16 prompt_layout'>
+      {data.map((news) => (
+        <NewsCard
+          key={news._id}
+          news={news}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Feed = () => {
+  const { data: session } = useSession();
   const [allPosts, setAllPosts] = useState([]);
+  const [allNews,setAllNews] = useState([])
 
   // Search states
   const [searchText, setSearchText] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
+
 
   const fetchPosts = async () => {
     const response = await fetch("/api/prompt");
@@ -33,8 +52,48 @@ const Feed = () => {
     setAllPosts(data);
   };
 
+  const checkAndScrape = async() => {
+
+    const response = await fetch("/api/news");
+    const data = await response.json();
+  
+    if (!data || data.length === 0) {
+      console.log("No news found, scraping started");
+      const newsResponse = await fetch("/api/scraper");
+      const scrapedNews = await newsResponse.json(); // Get the scraped news data
+      console.log(scrapedNews)
+  
+      try {
+  
+        // Save each news item to the database
+        for (const news of scrapedNews) {
+          await fetch('/api/news/new', {
+            method: "POST",
+            body: JSON.stringify({
+              news: news.title,
+              userId: session?.user.id,
+              tag: news.desc,
+            }),
+          });
+        }
+      } catch (error) {
+        console.error("Error saving scraped news:", error);
+      }
+  
+      // Re-fetch the data after scraping
+      const newResponse = await fetch("/api/news");
+      const newData = await newResponse.json();
+      setAllNews(newData); // Set the state with the updated data
+    } else {
+      setAllNews(data); // Set the state with the existing data
+    }
+  };
+  
+  
+
   useEffect(() => {
     fetchPosts();
+    checkAndScrape();
   }, []);
 
   const filterPrompts = (searchtext) => {
@@ -89,6 +148,9 @@ const Feed = () => {
       ) : (
         <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
       )}
+
+      <NewsCardList data={allNews} handleTagClick={handleTagClick} />
+
     </section>
   );
 };
