@@ -5,8 +5,9 @@ const url = 'https://timesofindia.indiatimes.com/news';
 export const GET = async () => {
   try {
     const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for serverless environments
-      headless: true,
+      executablePath: process.env.CHROME_BIN || '/usr/bin/chromium-browser', // Use Chromium path
+      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for serverless
+      headless: 'new', // New headless mode
     });
 
     const page = await browser.newPage();
