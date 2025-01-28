@@ -93,7 +93,7 @@ const Feed = () => {
 
   useEffect(() => {
     fetchPosts();
-    checkAndScrape();
+    // checkAndScrape();
   }, []);
 
   const filterPrompts = (searchtext) => {
