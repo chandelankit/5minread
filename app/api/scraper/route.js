@@ -1,7 +1,7 @@
 import chromium from '@sparticuz/chromium-min';
 import puppeteer from 'puppeteer-core';
 
-export const maxDuration = 60; // Set timeout to 60 seconds
+export const maxDuration = 60; // Ensures Vercel allows 60s execution time
 
 const url = 'https://timesofindia.indiatimes.com/news';
 
@@ -17,7 +17,9 @@ export const GET = async () => {
     });
 
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'networkidle2' });
+
+    // Increase timeout to 55s (slightly lower than Vercel's 60s limit)
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 55000 });
 
     const newsData = await page.evaluate(() => {
       const newsDivs = Array.from(document.querySelectorAll('.HytnJ li'));
