@@ -2,35 +2,24 @@ import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
 
 export const dynamic = 'force-dynamic';  // Force dynamic rendering
-export const revalidate = 0;  // Disable revalidation
 
-export async function GET() {
+export const GET = async (request) => {
   try {
+    // Ensure the database is connected
     await connectToDB();
-    
-    const prompts = await Prompt.find({}).populate('creator')
-      .select('-__v')  // Exclude version key
-      .lean();  // Convert to plain JS objects for better performance
-    
-    return new Response(JSON.stringify(prompts), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      }
-    });
+
+    // Fetch prompts and populate the creator field
+    const prompts = await Prompt.find({}).populate('creator');
+
+    // Set cache control headers to ensure fresh data
+    const headers = {
+      "Cache-Control": "no-store",  // Prevent caching
+      "Content-Type": "application/json",  // Ensure the response is treated as JSON
+    };
+
+    return new Response(JSON.stringify(prompts), { status: 200, headers });
   } catch (error) {
-    console.error('Failed to fetch prompts:', error);
-    return new Response(JSON.stringify({
-      message: "Failed to fetch prompts",
-      error: error.message
-    }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    console.error(error);  // Log the error for debugging
+    return new Response("Failed to fetch all prompts", { status: 500 });
   }
-}
+};
