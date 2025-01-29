@@ -1,6 +1,8 @@
 import chromium from '@sparticuz/chromium-min';
 import puppeteer from 'puppeteer-core';
 
+export const maxDuration = 60; // Set timeout to 60 seconds
+
 const url = 'https://timesofindia.indiatimes.com/news';
 
 export const GET = async () => {
