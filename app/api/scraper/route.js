@@ -1,12 +1,17 @@
-import puppeteer from 'puppeteer';
+import chromium from '@sparticuz/chromium-min';
+import puppeteer from 'puppeteer-core';
 
 const url = 'https://timesofindia.indiatimes.com/news';
 
 export const GET = async () => {
   try {
+    const isLocal = !!process.env.CHROME_EXECUTABLE_PATH;
+
     const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for serverless environments
-      headless: true,
+      args: isLocal ? puppeteer.defaultArgs() : chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: process.env.CHROME_EXECUTABLE_PATH || await chromium.executablePath(),
+      headless: chromium.headless,
     });
 
     const page = await browser.newPage();

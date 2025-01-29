@@ -10,14 +10,15 @@
     "postinstall": "npx puppeteer install"
   },
   "dependencies": {
+    "@sparticuz/chromium-min": "^132.0.0",
     "bcrypt": "^5.1.1",
-    "chrome-aws-lambda": "^10.1.0",
+    "ignore-loader": "^0.1.2",
     "mongodb": "^6.8.1",
     "mongoose": "^8.6.1",
     "next": "14.2.9",
     "next-auth": "^4.24.7",
     "puppeteer": "^24.1.0",
-    "puppeteer-core": "^10.1.0",
+    "puppeteer-core": "^24.1.1",
     "react": "^18",
     "react-dom": "^18"
   },
