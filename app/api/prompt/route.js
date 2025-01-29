@@ -1,8 +1,6 @@
 import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
 
-export const dynamic = 'force-dynamic';  // Force dynamic rendering
-
 export const GET = async (request) => {
   try {
     // Ensure the database is connected
