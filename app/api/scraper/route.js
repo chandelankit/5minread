@@ -1,9 +1,18 @@
 import chromium from '@sparticuz/chromium-min';
 import puppeteer from 'puppeteer-core';
 
-export const maxDuration = 60; // Ensures Vercel allows 60s execution time
+export const maxDuration = 60; // Ensure 60s execution time in Vercel
 
 const url = 'https://timesofindia.indiatimes.com/news';
+
+async function safeGoto(page, url, timeout = 55000) {
+  try {
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout });
+  } catch (error) {
+    console.warn('First attempt failed, retrying...');
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout });
+  }
+}
 
 export const GET = async () => {
   try {
@@ -13,13 +22,23 @@ export const GET = async () => {
       args: isLocal ? puppeteer.defaultArgs() : chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: process.env.CHROME_EXECUTABLE_PATH || await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v132.0.0/chromium-v132.0.0-pack.tar'),
-      headless: chromium.headless,
+      headless: 'new',
     });
 
     const page = await browser.newPage();
 
-    // Increase timeout to 55s (slightly lower than Vercel's 60s limit)
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 55000 });
+    // Speed up page loading by blocking images, fonts, and tracking scripts
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+      if (['image', 'stylesheet', 'font', 'media', 'script'].includes(req.resourceType())) {
+        req.abort();
+      } else {
+        req.continue();
+      }
+    });
+
+    // Navigate with retry mechanism
+    await safeGoto(page, url);
 
     const newsData = await page.evaluate(() => {
       const newsDivs = Array.from(document.querySelectorAll('.HytnJ li'));
