@@ -2,12 +2,14 @@
   "functions": {
     "app/api/*": {
       "maxDuration": 60
-    },
-      "crons": [{
-        "path": "app/api/deleteCollection",
-        "schedule": "10 5 * * *"
-      }]
+    }
   },
+  "crons": [
+    {
+      "path": "/api/deleteCollection",
+      "schedule": "10 5 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
