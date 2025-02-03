@@ -1,28 +1,36 @@
-import { MongoClient } from 'mongodb';
+import News from "@models/news";
+import { connectToDB } from "@utils/database";
 
-// MongoDB connection string
-const url = process.env.MONGO_DB_URI;
-const dbName = 'promptSearch';
+export const dynamic = 'force-dynamic';  // Force dynamic rendering
+export const revalidate = 0;  // Disable revalidation
 
-export async function GET(req) {
-  const client = new MongoClient(url);
-
+export async function GET() {
   try {
-    await client.connect();
-    const db = client.db(dbName);
-
-    // Specify the collection to delete
-    const collectionName = 'news';
-
-    // Drop the collection
-    await db.collection(collectionName).drop();
-    console.log(`Collection ${collectionName} has been deleted.`);
-
-    return Response.json({ message: 'Collection deleted successfully' }, { status: 200 });
+    await connectToDB();
+    
+    const news = await News.find({})
+      .select('-__v')  // Exclude version key
+      .lean();  // Convert to plain JS objects for better performance
+    
+    return new Response(JSON.stringify(news), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      }
+    });
   } catch (error) {
-    console.error('Error deleting collection:', error);
-    return Response.json({ error: 'Failed to delete collection' }, { status: 500 });
-  } finally {
-    await client.close();
+    console.error('Failed to fetch news:', error);
+    return new Response(JSON.stringify({
+      message: "Failed to fetch news",
+      error: error.message
+    }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   }
 }
