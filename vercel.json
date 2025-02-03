@@ -4,12 +4,12 @@
       "maxDuration": 60
     }
   },
-  "crons": [
-    {
-      "path": "/api/deletecollection",
-      "schedule": "*/5 * * * *"
-    }
-  ],
+  // "crons": [
+  //   {
+  //     "path": "/api/deletecollection",
+  //     "schedule": "*/5 * * * *"
+  //   }
+  // ],
   "headers": [
     {
       "source": "/api/(.*)",
