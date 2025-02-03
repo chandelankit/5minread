@@ -6,7 +6,7 @@
   },
   "crons": [
     {
-      "path": "/api/deletecollection",
+      "path": "api/deletecollection/route",
       "schedule": "*/5 * * * *"
     }
   ],
