@@ -2,7 +2,12 @@
   "functions": {
     "app/api/*": {
       "maxDuration": 60
+    },
+
+    "app/api/deleteCollection": {
+      "schedule": "58 4 * * *"
     }
+    
   },
   "headers": [
     {
