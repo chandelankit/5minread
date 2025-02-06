@@ -2,7 +2,7 @@ name: Invoke API Every 5 Minutes
 
 on:
   schedule:
-    - cron: "*/1 * * * *"  # Runs every 5 minutes
+    - cron: "*/1 * * * *"
 
 jobs:
   call-api:
@@ -10,4 +10,4 @@ jobs:
     steps:
       - name: Make API request
         run: |
-          curl -X GET "https:localhost:3000/api/deleteCollection"
+          curl -X GET "https://5min-read.vercel.app/api/deleteCollection"
