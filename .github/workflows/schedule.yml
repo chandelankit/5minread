@@ -2,7 +2,7 @@ name: Invoke API Every 5 Minutes
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/1 * * * *"
 
 jobs:
   call-api:
