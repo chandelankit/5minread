@@ -1,4 +1,4 @@
-name: Invoke API Every 1 Minute
+name: Invoke deletion after 12 hours
 
 on:
   schedule:
