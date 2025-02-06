@@ -3,6 +3,7 @@ name: Invoke API Every 1 Minute
 on:
   schedule:
     - cron: "*/1 * * * *"
+  workflow_dispatch:
 
 jobs:
   call-api:
