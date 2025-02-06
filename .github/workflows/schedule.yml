@@ -2,7 +2,7 @@ name: Invoke API Every 5 Minutes
 
 on:
   schedule:
-    - cron: "*/1 * * * *"
+    - cron: "*/5 * * * *"
 
 jobs:
   call-api:
@@ -10,4 +10,9 @@ jobs:
     steps:
       - name: Make API request
         run: |
-          curl -X GET "https://5min-read.vercel.app/api/deleteCollection"
+          response=$(curl -s -o response.txt -w "%{http_code}" -X GET "https://5min-read.vercel.app/api/deleteCollection")
+          if [ "$response" -ne 200 ]; then
+            echo "API request failed with status code $response"
+            cat response.txt
+            exit 1
+          fi
