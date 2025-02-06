@@ -1,4 +1,4 @@
-name: Invoke API Every 5 Minutes
+name: Invoke API Every 1 Minute
 
 on:
   schedule:
@@ -8,11 +8,24 @@ jobs:
   call-api:
     runs-on: ubuntu-latest
     steps:
+      - name: Check Internet Connectivity
+        run: |
+          echo "Checking internet connectivity..."
+          ping -c 4 google.com || curl -I https://www.google.com
+
+      - name: Debug API Endpoint
+        run: |
+          echo "Testing API endpoint..."
+          curl -v "https://5min-read.vercel.app/api/deleteCollection"
+
       - name: Make API request
         run: |
           response=$(curl -s -o response.txt -w "%{http_code}" -X GET "https://5min-read.vercel.app/api/deleteCollection")
+          echo "Response Code: $response"
+          echo "Response Body:"
+          cat response.txt
+          
           if [ "$response" -ne 200 ]; then
             echo "API request failed with status code $response"
-            cat response.txt
             exit 1
           fi
