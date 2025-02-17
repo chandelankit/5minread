@@ -4,7 +4,7 @@ const nextConfig = {
       serverComponentsExternalPackages: ['mongoose'],
     },
     images: {
-      domains: ['lh3.googleusercontent.com'],
+      domains: ['lh3.googleusercontent.com','images.unsplash.com'],
     },
     webpack(config, { isServer }) {
       if (!isServer) {
