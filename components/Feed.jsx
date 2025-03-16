@@ -101,8 +101,8 @@ const Feed = () => {
   
   const testimonials = allNews.length > 0
     ? allNews.map((newsItem, index) => ({
-        quote: newsItem.news || "No headline available", // Fallback text
-        name: `Source ${index + 1}`,
+        quote: newsItem.tag || "No headline available", // Fallback text
+        name: newsItem.news ||`Source ${index + 1}`,
         designation: "Latest News",
         src: newsItem.newsimg,
       }))
