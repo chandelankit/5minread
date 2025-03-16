@@ -42,11 +42,25 @@ export const GET = async () => {
 
     const newsData = await page.evaluate(() => {
       const newsDivs = Array.from(document.querySelectorAll('.HytnJ li'));
-      return newsDivs.slice(0, 10).map((newsDiv) => ({
-        title: newsDiv.querySelector('.UreF0 .CRKrj')?.innerText.trim() || 'No title',
-        desc: newsDiv.querySelector('.UreF0 .W4Hjm')?.innerText.trim() || 'No description',
-      }));
+    
+      return newsDivs.slice(0, 10).map((newsDiv) => {
+        const imgElement = newsDiv.querySelector('.Ng0mw .oo7Ma img');
+    
+        let newsImg = imgElement?.getAttribute('data-src') || imgElement?.getAttribute('src');
+    
+        // Ensure the extracted URL is not a placeholder
+        if (newsImg?.includes("placeholdersrc")) {
+          newsImg = 'https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop';
+        }
+    
+        return {
+          title: newsDiv.querySelector('.UreF0 .CRKrj')?.innerText.trim() || 'No title',
+          desc: newsDiv.querySelector('.UreF0 .W4Hjm')?.innerText.trim() || 'No description',
+          newsImg,
+        };
+      });
     });
+    
 
     await browser.close();
     return new Response(JSON.stringify(newsData), { status: 200 });

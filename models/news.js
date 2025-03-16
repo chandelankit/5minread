@@ -8,6 +8,10 @@ const NewsSchema = new Schema({
   tag: {
     type: String,
     required: [true, 'desc is required.'],
+  },
+  newsimg: {
+    type: String,
+    required: [true,'newsSrc is required']
   }
 });
 

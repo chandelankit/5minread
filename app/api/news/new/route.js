@@ -2,11 +2,11 @@ import News from "@models/news";
 import { connectToDB } from "@utils/database";
 
 export const POST = async (request) => {
-    const { userId,news, tag } = await request.json();
+    const { userId, news, tag, newsimg } = await request.json();
 
     try {
         await connectToDB();
-        const newNews = new News({ creator: userId, news, tag });
+        const newNews = new News({ creator: userId, news, tag, newsimg });
 
         await newNews.save();
         return new Response(JSON.stringify(newNews), { status: 201 })
