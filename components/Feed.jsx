@@ -169,7 +169,6 @@ const Feed = () => {
         <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
       )}
 
-      <NewsCardList data={allNews} handleTagClick={handleTagClick} />
       <AnimatedTestimonials testimonials={testimonials}/>
     </section>
   );
