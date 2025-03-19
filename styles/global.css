@@ -20,7 +20,7 @@
 }
 
 .main:before {
-  background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #ffffff 100%);
+  background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #A9A9A9 100%);
   position: absolute;
   content: "";
   z-index: 2;
@@ -91,7 +91,7 @@
 }
 
 .orange_gradient {
-  @apply bg-gradient-to-r from-amber-500 via-orange-600 to-yellow-500 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-blue-500 via-white to-red-500 bg-clip-text text-transparent;
 }
 
 .green_gradient {
@@ -103,7 +103,7 @@
 }
 
 .desc {
-  @apply mt-5 text-lg text-gray-600 sm:text-xl max-w-2xl;
+  @apply mt-5 text-lg text-white sm:text-xl max-w-2xl;
 }
 
 .search_input {
