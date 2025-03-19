@@ -7,6 +7,45 @@
 /* 
   Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them! 
 */
+/* Base styles for the prompt card */
+/* Wrapper for the prompt card */
+.prompt_card_wrapper {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: white;
+  border: 5px solid #6A89A7;
+}
+
+/* Inner prompt card styling */
+.prompt_card {
+  position: relative;
+  padding: 10px;
+  background-color: #6A89A7;
+  border: 2px solid black;
+  border-radius: 10px;
+  transition: border-color 0.3s ease;
+}
+
+/* Glow effect */
+.glow {
+  position: absolute;
+  top: var(--y, 50%);
+  left: var(--x, 50%);
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.5);
+  filter: blur(50px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: top 0.1s ease, left 0.1s ease;
+}
+
+/* Show glow on hover */
+.prompt_card_wrapper:hover .glow {
+  opacity: 1;
+}
+
 
 .main {
   width: 100vw;
@@ -104,6 +143,9 @@
 
 .desc {
   @apply mt-5 text-lg text-white sm:text-xl max-w-2xl;
+}
+.newdesc {
+  @apply mt-5 text-lg text-black sm:text-xl max-w-2xl;
 }
 
 .search_input {
