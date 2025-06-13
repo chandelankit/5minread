@@ -10,6 +10,8 @@
     "postinstall": "npx puppeteer install"
   },
   "dependencies": {
+    "@google/genai": "^0.14.1",
+    "@google/generative-ai": "^0.24.1",
     "@sparticuz/chromium-min": "^132.0.0",
     "@tabler/icons-react": "^3.30.0",
     "bcrypt": "^5.1.1",
@@ -22,6 +24,7 @@
     "motion": "^12.5.0",
     "next": "14.2.9",
     "next-auth": "^4.24.7",
+    "openai": "^4.98.0",
     "puppeteer": "^24.1.0",
     "puppeteer-core": "^24.1.1",
     "react": "^18",

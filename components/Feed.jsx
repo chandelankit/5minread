@@ -96,23 +96,30 @@ const Feed = () => {
   return (
     <section className="feed">
       <AnimatedTestimonials
-        testimonials={
-          allNews.length > 0
-            ? allNews.map((newsItem, index) => ({
-                quote: newsItem.tag || "No headline available",
-                name: newsItem.news || `Source ${index + 1}`,
-                designation: "Latest News",
-                src: newsItem.newsimg,
-              }))
-            : [
-                {
-                  quote: "Fetching latest news...",
-                  name: "News Bot",
-                  designation: "AI Reporter",
-                  src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop",
-                },
-              ]
-        }
+testimonials={
+  allNews.length > 0
+    ? allNews.map((newsItem, index) => ({
+        _id: newsItem._id,
+        quote: newsItem.tag || "No headline available",
+        name: newsItem.news || `Source ${index + 1}`,
+        designation: "Latest News",
+        src: newsItem.newsimg,
+        upvote: newsItem.upvote || 0,
+        downvote: newsItem.downvote || 0,
+      }))
+    : [
+        {
+          _id: "placeholder-id",
+          quote: "Fetching latest news...",
+          name: "News Bot",
+          designation: "AI Reporter",
+          src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop",
+          upvote: 0,
+          downvote: 0,
+        },
+      ]
+}
+
       />
       <form className="relative w-full flex-center">
         <input
